@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Birds List</h1>
+
+{% for bird in birds %}
+<div class="card">
+    <a href="{% url 'details' bird.id %}">
+        <div class="card_content">
+            <span class="card_title">{{bird.name}}</span>
+            <p>Species: {{bird.species}}</p>
+            <p>Description: {{bird.description}}</p>
+            {% if bird.age > 0 %}
+            <p>Age: {{bird.age}}</p>
+            {% else %}
+            <p>Age: Baby Bird!</p>
+            {% endif %}
+        </div>
+    </a>
+</div>
+{% endfor %}
+{% endblock %}
