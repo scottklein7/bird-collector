@@ -28,10 +28,13 @@ def get_bird_index(request):
 def get_bird_details(request, bird_id):
     bird = Bird.objects.get(id=bird_id)
     feeding_form = FeedingForm()
-    return render(request, 'birds/bird_details.html', {
-        'bird': bird,
-        'feeding_form': feeding_form,
-        })
+    toys_cat_doesnt_have = Toy.objects.exclude(id__in = bird.toys.all().values_list('id'))
+    
+    return render(request, 'Birds/bird_details.html', {
+       'bird': bird, 
+       'feeding_form': feeding_form,
+       'toys': toys_cat_doesnt_have 
+    })
 
 
 def add_feeding(request, bird_id):
@@ -40,6 +43,11 @@ def add_feeding(request, bird_id):
         new_feeding = form.save(commit=False)
         new_feeding.bird_id = bird_id
         new_feeding.save()
+    return redirect('details', bird_id=bird_id)
+
+
+def assoc_toy(request, bird_id, toy_id):
+    Bird.objects.get(id=bird_id).toys.add(toy_id)
     return redirect('details', bird_id=bird_id)
 
 
